@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QuestWorks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Quicksand:wght@500&display=swap" rel="stylesheet">
+   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/9664/9664251.png" type="image/png" />
+  <style>
+    :root {
+      --bg-color: #f0f4f8;
+      --card-bg: rgba(255, 255, 255, 0.3);
+      --text-color: #333;
+      --header-bg: linear-gradient(135deg, #ff7b00, #ff416c);
+      --accent-color: #ff416c;
+      --glass-blur: blur(10px);
+    }
+
+    body.dark {
+      --bg-color: #1a1a1a;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --text-color: #eee;
+      --header-bg: linear-gradient(135deg, #ff416c, #800080);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      transition: background 0.5s, color 0.5s;
+    }
+
+    header {
+      background: var(--header-bg);
+      color: white;
+      padding: 100px 30px 60px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      font-size: 4em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    header p {
+      font-size: 1.4em;
+      margin-top: 10px;
+      color: #f0eaea;
+    }
+
+    .toggle-wrapper {
+      margin-top: 20px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #ff416c;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(28px);
+    }
+
+    .toggle-label {
+      display: inline-block;
+      margin-left: 12px;
+      font-size: 1em;
+      color: white;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 60px 20px;
+    }
+
+    .search {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .search input {
+      padding: 16px;
+      width: 70%;
+      border-radius: 50px;
+      border: 2px solid #ff7b00;
+      outline: none;
+      font-size: 1.1em;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .search button {
+      margin-top: 20px;
+      padding: 14px 26px;
+      border: none;
+      border-radius: 50px;
+      background-color: #ff416c;
+      color: white;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: 0.3s ease-in-out;
+    }
+
+    .search button:hover {
+      background-color: #e0355e;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: var(--glass-blur);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      text-align: left;
+      transition: transform 0.3s, box-shadow 0.3s;
+      color: var(--text-color);
+      position: relative;
+      opacity: 0; /* Initial state for animation */
+      animation: fadeIn 0.6s forwards; /* Apply animation */
+    }
+
+    .card:hover {
+      transform: perspective(800px) rotateX(2deg) rotateY(-2deg);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      font-size: 1.4em;
+      color: var(--accent-color);
+    }
+
+    .card p {
+      font-size: 1.1em;
+      margin: 10px 0;
+    }
+
+    .initial-message {
+      font-size: 1.2em;
+      text-align: center;
+      color: #666;
+    }
+
+    footer {
+      background: #333;
+      color: #fff;
+      text-align: center;
+      padding: 40px 20px;
+      margin-top: 60px;
+    }
+
+    @media (max-width: 768px) {
+      .search input {
+        width: 85%;
+      }
+
+      header h1 {
+        font-size: 3em;
+      }
+    }
+
+    /* Animation for the card fade-in */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>QuestWorks</h1>
+    <p>Small Quests, Smaller Rewards</p>
+    <div class="toggle-wrapper">
+      <label class="switch">
+        <input type="checkbox" id="darkToggle">
+        <span class="slider round"></span>
+      </label>
+      <span class="toggle-label">Dark Mode</span>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="search">
+      <input type="text" id="search" placeholder="Search quests..." />
+      <br><br>
+      <button onclick="generateQuest()">🎲 Generate a Random Quest</button>
+    </div>
+    <div class="grid" id="questGrid">
+      <p class="initial-message">Click the button to get a quest!</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>Made by an idiot. BRP0415</p>
+  </footer>
+
+  <script>
+    const quests = [
+      "📝 Write a haiku about your day",
+      "🧹 Organize your desktop files",
+      "📞 Call a friend you haven’t talked to in a while",
+      "🍜 Try a new recipe from another country",
+      "🌍 Learn five phrases in a new language",
+      "🧺 Clean one drawer in your home",
+      "🤸 Stretch for 10 minutes",
+      "💬 Compliment a stranger online",
+      "📖 Read one chapter of a book",
+      "🚶‍♂️ Take a different route on your walk",
+      "🎨 Try a new art technique",
+      "🧘‍♂️ Practice mindfulness or meditation for 10 minutes",
+      "🎶 Listen to a new genre of music you haven’t tried before",
+      "📚 Pick up a book you've never finished and read one chapter",
+      "🎥 Watch a documentary about a topic you know nothing about",
+      "🏞️ Plan a small weekend getaway or day trip",
+      "🌱 Start a small plant or herb garden",
+      "👟 Take a 20-minute walk and try to notice something new",
+      "🗣️ Try speaking in a foreign accent for an hour",
+      "📸 Take a photo of something beautiful outside",
+      "🏠 Rearrange the furniture in one room of your house",
+      "🎁 Create a thoughtful gift for someone you care about",
+      "📝 Write a letter to your future self",
+      "🏅 Set a small, achievable goal for the week and work towards it",
+      "🍂 Spend 30 minutes outdoors and focus on nature around you",
+      "🕯️ Have a candlelit dinner or breakfast by yourself",
+      "📅 Plan a day with no distractions to focus on personal growth",
+      "🖼️ Visit a local art gallery or museum you’ve never been to",
+      "🌌 Stargaze and try to identify at least five constellations",
+      "🥳 Do a small act of kindness for a stranger today",
+      "💡 Try a new productivity technique for a day",
+      "🔮 Write down your dreams and goals for the next year",
+      "🕵️‍♂️ Learn a new skill on YouTube or through a tutorial",
+      "🎬 Rewatch an old favorite movie you haven’t seen in years",
+      "💻 Organize your email inbox and unsubscribe from old lists",
+      "🏞️ Go on a virtual tour of a famous place you’ve never been",
+      "👩‍🍳 Experiment with cooking a dish from a cuisine you've never tried",
+      "🧳 Organize your travel packing list for a future trip",
+      "🎁 Start a gratitude journal and write down 5 things you’re thankful for",
+      "🧑‍💻 Create a vision board for your personal goals and dreams",
+      "💪 Take a new fitness challenge or workout routine for a week",
+      "🍕 Host a small pizza-making night with friends or family",
+      "🎤 Sing a song loudly to boost your mood (even if it’s off-key!)",
+      "🎯 Set a challenge to focus for one hour on a personal project",
+      "👨‍🍳 Learn how to bake a new type of bread or pastry",
+      "🎲 Play a board game or card game with family or friends",
+      "📅 Organize your calendar for the upcoming month",
+      "🎓 Learn something new from a TED talk or online course",
+      "🚴‍♂️ Go on a bike ride through your neighborhood or a park",
+      "📱 Organize your phone’s home screen for better productivity",
+      "🌍 Donate to a cause or charity you care about",
+      "🎹 Learn a new song on an instrument you play",
+      "🧳 Create a packing list for your dream vacation destination",
+      "🚀 Set up a morning or evening routine that makes you feel productive",
+      "🥂 Have a solo celebration to appreciate your own achievements",
+      "📖 Read a self-help or personal growth book",
+      "💅 Treat yourself to a relaxing bath or spa night",
+      "🖋️ Write a poem about a subject you love",
+      "🏃‍♂️ Try running or walking a longer distance than you usually do",
+      "🍓 Try a new smoothie recipe using fresh ingredients",
+      "🧳 Declutter your closet and donate clothes you no longer wear",
+      "📸 Capture a moment of beauty in your day",
+      "🧳 Start a personal project you've been meaning to work on",
+      "📖 Start a mini book club with a friend and read together",
+      "🍉 Cook a healthy meal with only ingredients you have at home",
+      "🥤 Try a new healthy drink or juice recipe",
+      "🎲 Make a list of your top 10 favorite things and why",
+      "🛀 Practice a digital detox for an hour and enjoy quiet time",
+      "🎶 Play your favorite song and dance like nobody’s watching",
+      "🥒 Try a new type of salad or vegetable dish",
+      "👩‍🏫 Teach yourself a new skill or hobby today",
+      "🧵 Start a DIY craft or home improvement project",
+      "🎸 Learn a new chord or song on the guitar",
+      "🛍️ Shop secondhand for something unique or vintage",
+      "👗 Create an outfit you’ve never worn before from your closet",
+      "🛋️ Reorganize your living room or workspace for a fresh vibe",
+      "🎤 Try your hand at karaoke for fun",
+      "📚 Set a timer and read for 15 minutes straight without distractions",
+      "🖼️ Paint a small piece of artwork or draw something new",
+      "🍣 Try making sushi at home with your own ingredients",
+      "💌 Write a heartfelt letter to someone you appreciate",
+      "🔍 Explore a new hobby and learn a little about it",
+      "🎧 Listen to an inspiring podcast episode",
+      "📝 Write down one thing you’ve always wanted to do but haven’t yet",
+      "🌋 Learn about a volcano or earthquake and how it works",
+      "🏙️ Take a walk around a part of your town or city you’ve never explored",
+      "📋 Organize your to-do list for the next week and get a head start",
+      "💃 Try a new type of dance or movement (even if just in your living room)",
+      "🍳 Try making an elaborate breakfast for yourself",
+      "🎣 Go fishing or try to catch something with your hands",
+      "📍 Visit a local landmark or tourist attraction",
+      "🏖️ Plan a “staycation” where you explore your own city like a tourist",
+      "🖱️ Try an app or website that you've never used before",
+      "🖥️ Build a small website or blog to showcase a passion",
+      "🎧 Try listening to a new audiobook",
+      "📝 Create a vision board for your ideal future",
+      "🎉 Write a plan for a fun event or celebration you’d like to host",
+      "🌌 Stargaze and try to capture the beauty of the night sky with photography",
+      "🌻 Plant flowers or vegetables in your yard or balcony",
+      "💻 Learn a new programming language or skill online",
+      "📔 Start a personal journal and write about your day or thoughts",
+      "🎨 Make your own DIY art supplies and create something unique",
+      "📻 Tune into a radio station or podcast you've never listened to",
+      "🥇 Research an inspirational person and learn about their journey",
+      "🎧 Try a guided meditation or visualization exercise",
+      "🔧 Fix something around the house that’s been broken for a while",
+      "🎮 Try a new video game genre or style you’ve never played before",
+      "💡 Brainstorm a business idea or side project to start",
+      "🍁 Try a new hobby or interest that has always intrigued you",
+      "💪 Join an online workout class",
+      "🗺️ Make a vision map of your dreams for the next year",
+      "🎤 Start a podcast and share your thoughts with the world",
+      "🧭 Go on a scavenger hunt in your neighborhood",
+      "🍋 Try to make a new citrus-infused drink",
+      "🛁 Spend an hour pampering yourself with a home spa",
+      "🌿 Create a new eco-friendly habit for your daily routine",
+      "🎯 Create a new budget or savings plan for the next month",
+      "🍩 Try baking your own donuts at home",
+      "🎧 Curate a playlist of songs that boost your mood",
+      "🚴‍♀️ Try a new cycling route in your area",
+      "🎮 Try a challenging video game that tests your skills",
+      "🖋️ Write a short story in one sitting",
+      "🌐 Take a free online class or webinar in something that interests you",
+      "🥪 Try making your own sandwich recipe and share it with someone",
+      "🌅 Go watch the sunrise from a nearby viewpoint",
+      "⛷️ Try a new winter sport or activity like skiing or snowboarding",
+      "🥳 Celebrate a small achievement today with something you enjoy",
+      "🖋️ Start writing a novel or creative story",
+      "🍿 Watch a documentary or film you've never heard of",
+      "🌠 Watch a meteor shower or look for shooting stars",
+      "🎮 Try a new game every weekend until you find a favorite",
+      "📜 Try your hand at calligraphy or creative writing",
+      "🏅 Join a challenge like 30 days of gratitude or meditation",
+      "⏳ Set a timer and work on a goal without any distractions for 30 minutes",
+      "🖤 Do something spontaneous and unexpected today",
+      "🎨 Try painting with new materials or unconventional tools",
+      "🏕️ Plan a mini camping trip in your own backyard",
+      "🎣 Try fishing in a local lake or river",
+      "🍿 Create a themed movie night and invite friends to join",
+      "🧩 Try a puzzle or brain teaser for a bit of mental exercise"
+    ];
+
+    const grid = document.getElementById('questGrid');
+    const search = document.getElementById('search');
+    const darkToggle = document.getElementById('darkToggle');
+
+    // Initialize an empty array for quests, no persistent storage
+    let questHistory = [];
+
+    function displayQuests(list, isSearch = false) {
+      grid.innerHTML = "";
+      if (list.length === 0) {
+        grid.innerHTML = "<p class='initial-message'>No quests found.</p>";
+        return;
+      }
+
+      list.forEach((questObj, index) => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        // Change the header text if it's a search result
+        const title = isSearch ? "🔍 Searched Quest" : (index === 0 ? "🌟 New Side Quest!" : "✨ Past Quest");
+
+        card.innerHTML = `
+          <h3>${title}</h3>
+          <p>${questObj.text}</p>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    function generateQuest() {
+      const randomIndex = Math.floor(Math.random() * quests.length);
+      const randomQuest = quests[randomIndex];
+      const newQuest = {
+        text: randomQuest,
+        completed: false,
+        favorited: false,
+        timestamp: new Date().toISOString()
+      };
+      questHistory.unshift(newQuest);  // Add the new quest to the beginning
+      displayQuests(questHistory);
+
+      // Clear the search input when a new quest is generated
+      search.value = '';  // This clears the search input field
+
+      // Optionally, you can also reset the displayed quests (if search was active)
+      displayQuests(questHistory);  // Display the quests again
+    }
+
+    // Dark mode toggle
+    darkToggle.addEventListener("change", () => {
+      document.body.classList.toggle("dark", darkToggle.checked);
+      localStorage.setItem("darkMode", darkToggle.checked);
+    });
+
+    // Load dark mode preference
+    if (localStorage.getItem("darkMode") === "true") {
+      document.body.classList.add("dark");
+      darkToggle.checked = true;
+    }
+
+    // Initial render (no saved quests, just start fresh)
+    displayQuests(questHistory);
+
+    // Function to handle search filtering based on generated quests
+    function searchQuests() {
+      const query = search.value.toLowerCase();  // Get search input and convert to lowercase
+
+      // Filter the questHistory based on the search query
+      const filteredQuests = questHistory.filter(quest => quest.text.toLowerCase().includes(query));
+
+      displayQuests(filteredQuests, true);  // Display filtered quests with search indication
+    }
+
+    // Add event listener to trigger search when typing in the search box
+    search.addEventListener('input', searchQuests);
+
+  </script>
+</body>
+</html>
